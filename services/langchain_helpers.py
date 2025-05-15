@@ -2,7 +2,7 @@ from datetime import datetime
 from typing import List
 from dateutil import parser as dateparser
 from dateutil.relativedelta import relativedelta
-from langchain_community.llms.ollama import Ollama
+from langchain_openai import ChatOpenAI
 import langchain
 from langchain_community.cache import InMemoryCache
 from .. import config
@@ -14,11 +14,8 @@ langchain.llm_cache = InMemoryCache()
 
 def create_llm(**kwargs):
     """Create an LLM instance with specified parameters."""
-    chat_model = kwargs.pop("chat_model", Ollama)
-    kwargs.setdefault("model", "mistral")  # or your preferred local model
-    kwargs.setdefault("base_url", "http://localhost:11434")
-    kwargs.setdefault("temperature", 0.15)
-    kwargs.setdefault("seed", 42)
+    chat_model = kwargs.pop("chat_model", ChatOpenAI)
+    kwargs.setdefault("model_name", config.MODEL_NAME)
     kwargs.setdefault("cache", False)
     return chat_model(**kwargs)
 
